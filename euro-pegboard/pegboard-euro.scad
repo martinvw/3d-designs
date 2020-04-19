@@ -68,8 +68,8 @@ hole_spacing_z = 24;
 hole_spacing_x = 48;
 
 hole_size_x = 7;
-hole_size_y = 4.5;
-board_thickness = 2.4;
+hole_size_z = 4.5;
+board_thickness = 2.0;
 
 // TODO check this!!!
 edge_size = 8.45;
@@ -126,7 +126,7 @@ module round_rect_ex(x1, y1, x2, y2, z, r1, r2)
 module pin(clipX, clipY)
 {        
 	if (clipX && clipY) {
-        cube([hole_size_x,hole_size_y,board_thickness], center=true);
+        cube([hole_size_x,hole_size_z,board_thickness], center=true);
 		
         intersection() {
 			translate([0, 0, board_thickness / 2])
@@ -134,10 +134,10 @@ module pin(clipX, clipY)
         }
 	} else if (clipX || clipY) {
         vertical = holder_total_z > holder_total_z;
-        x = vertical ? 3 : edge_size * 0.8;
-        y = vertical ? edge_size * 0.8 : 3;
-        translate([0,0,-board_thickness / 2 + 0.5])
-            cube([x,y,0.5], center=true);
+        x = vertical ? 3 : hole_size_x * 0.85;
+        y = vertical ? hole_size_x * 0.85 : 3;
+        translate([0,0,-board_thickness / 2 + 0.4])
+            cube([x,y,0.7], center=true);
     }
 }
 
@@ -151,7 +151,7 @@ module pinboard_clips()
         for(x=[0:xCount]) {
             for(z=[0:zCount]) {
                 translate([
-                    z * hole_spacing_z/2, 
+                    z * hole_spacing_z/2 - ((hole_size_x - edge_size) / 2), 
                     -(hole_spacing_x/4) * xCount/2 + (x * hole_spacing_x/4), 
                     0])
                         pin(z % 2 == 0, (
