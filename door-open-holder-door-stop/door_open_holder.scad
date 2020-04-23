@@ -15,7 +15,7 @@ width = 20;
 thickness = 5;
 
 // Cut Off Angle [0-90]; 45° for auto slip on/off, 90° (max)
-cutOffAngle = 0; 
+cutOffAngle = 90; 
 
 // Diameter of door handle
 diameterDoorHandle = 17;
@@ -55,12 +55,15 @@ module roundedHalfBox()
                 cube([ thickness, length - 2 * rs, width - 2 * rs ]);
         }
 
-        translate([ thickness, length / 4 - 2 * rs, width / 2 ])
-            rotate([ 0, 270, 0 ])
-                screw_countersunk(l = thickness, ds = 3.5, dh = 8);
+        if (width > 8) {
+            translate([ thickness, length / 4 - 2 * rs, width / 2 ])
+                rotate([ 0, 270, 0 ])
+                    screw_countersunk(l = thickness, ds = 3.5, dh = 8);
 
-        translate([ thickness, length / 4 * 3 + 2 * rs, width / 2 ])
-            rotate([ 0, 270, 0 ]) screw_countersunk(l = thickness);
+            translate([ thickness, length / 4 * 3 + 2 * rs, width / 2 ])
+                rotate([ 0, 270, 0 ]) 
+                    screw_countersunk(l = thickness);
+        }
     }
 
     translate([ 0, length - rs, rs ]) rotate([ 0, 90, 0 ])
