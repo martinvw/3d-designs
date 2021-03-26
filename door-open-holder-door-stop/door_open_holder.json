@@ -1,0 +1,14 @@
+{
+    "parameterSets": {
+        "door-holder-v1": {
+            "bottomLength": "80",
+            "cutOffAngle": "90",
+            "diameterDoorHandle": "17",
+            "quality": "50",
+            "thickness": "8",
+            "topLength": "40",
+            "width": "30"
+        }
+    },
+    "fileFormatVersion": "1"
+}

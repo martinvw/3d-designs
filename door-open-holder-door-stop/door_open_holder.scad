@@ -5,8 +5,11 @@
 
 // preview[view:north, tilt:bottom diagonal]
 
-// Total length of base plate
-length = 80;
+// Length of base plate above the hook
+topLength = 40;
+
+// Length of base platen below the hook
+bottomLength = 80;
 
 // Width of base plate
 width = 20;
@@ -15,7 +18,7 @@ width = 20;
 thickness = 5;
 
 // Cut Off Angle [0-90]; 45° for auto slip on/off, 90° (max)
-cutOffAngle = 90; 
+cutOffAngle = 55; 
 
 // Diameter of door handle
 diameterDoorHandle = 17;
@@ -27,7 +30,8 @@ quality = 50;
 
 rs = thickness / 2;
 radiusDoorHandle = diameterDoorHandle / 2;
-yOffset = length / 2 - 5;
+length = topLength + bottomLength;
+yOffset = bottomLength - 5;
 
 module profile()
 {
@@ -55,12 +59,12 @@ module roundedHalfBox()
                 cube([ thickness, length - 2 * rs, width - 2 * rs ]);
         }
 
-        if (width > 8) {
-            translate([ thickness, length / 4 - 2 * rs, width / 2 ])
+        if (width > 20) {
+            translate([ thickness, 3 * rs, width / 2 ])
                 rotate([ 0, 270, 0 ])
                     screw_countersunk(l = thickness, ds = 3.5, dh = 8);
 
-            translate([ thickness, length / 4 * 3 + 2 * rs, width / 2 ])
+            translate([ thickness, bottomLength + topLength - 3 * rs, width / 2 ])
                 rotate([ 0, 270, 0 ]) 
                     screw_countersunk(l = thickness);
         }
@@ -99,7 +103,7 @@ module roundedBox(h, d, radius)
 
 // Based on: https://gist.github.com/Stemer114/af8ef63b8d10287c825f
 module screw_countersunk(l = 20,   // length
-                         dh = 6,   // head dia
+                         dh = 8,   // head dia
                          lh = 3,   // head length
                          ds = 3.2, // shaft dia
 )

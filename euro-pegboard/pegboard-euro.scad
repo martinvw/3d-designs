@@ -13,10 +13,10 @@
 // preview[view:north, tilt:bottom diagonal]
 
 // width of the orifice
-holder_x_size = 10;
+holder_x_size = 10.0;
 
 // depth of the orifice
-holder_y_size = 10;
+holder_y_size = 10.0;
 
 // hight of the holder
 holder_height = 15;
@@ -64,8 +64,8 @@ holder_angle = 0.0;
 holder_sides = max(50, min(20, holder_x_size*2));
 
 // dimensions EU Pegboard
-hole_spacing_z = 24;
-hole_spacing_x = 48;
+hole_spacing_z = 25;
+hole_spacing_x = 37.5;
 
 hole_size_x = 7;
 hole_size_z = 4.5;
@@ -74,7 +74,7 @@ board_thickness = 2.0;
 // TODO check this!!!
 edge_size = 8.45;
 edge_thickness = 2.5;
-min_width_for_single_height=32;
+min_width_for_single_height = 32;
 
 holder_total_y = wall_thickness + holder_y_count*(wall_thickness+holder_y_size);
 holder_total_temp_x = wall_thickness + holder_x_count*(wall_thickness+holder_x_size);
@@ -144,19 +144,29 @@ module pin(clipX, clipY)
 module pinboard_clips() 
 {
 	rotate([0,90,0]){        
-        xTempCount = floor(holder_total_x/(hole_spacing_x / 4));
-        xCount = xTempCount % 4 == 1 ? xTempCount - 1 : (xTempCount% 4 == 3 ? xTempCount - 1 : xTempCount);
+        xTempCount = floor(holder_total_x/(hole_spacing_x / 3));
+        xCount = xTempCount % 3 == 1 ? xTempCount - 1 : (xTempCount% 3 == 3 ? xTempCount - 1 : xTempCount);
         zCount = pin_z_count * 2 - 2;
+               
         
         for(x=[0:xCount]) {
             for(z=[0:zCount]) {
-                translate([
-                    z * hole_spacing_z/2 - ((hole_size_x - edge_size) / 2), 
-                    -(hole_spacing_x/4) * xCount/2 + (x * hole_spacing_x/4), 
-                    0])
-                        pin(z % 2 == 0, (
-                (x % 4 == 1 && xCount % 4 != 0) ||
-                (xCount % 4 == 0 && x % 4 == 0)));
+                
+                rowIsEven = z % 2 == 0;
+                firstItem = x == 0;
+                lastItem = x == xCount;
+                firstRow = z == 0;
+                skipWhen = !firstRow && rowIsEven && (firstItem || lastItem);
+                
+                if (!skipWhen) {                
+                    translate([
+                        z * hole_spacing_z/2 - ((hole_size_x - edge_size) / 2), 
+                        -(hole_spacing_x/3) * xCount/2 + (x * hole_spacing_x/3), 
+                        0])
+                            pin(z % 2 == 0, (
+                    (x % 3 == 1 && xCount % 3 != 0) ||
+                    (xCount % 3 == 0 && x % 3 == 0)));
+                }
             }
         }
     }
@@ -176,11 +186,11 @@ module pinboard()
 			holder_total_x/2,0])
 			cylinder(r=hole_size_x/2,  h=wall_thickness);
 
-		translate([max(strength_factor, pin_z_count - 1)*hole_spacing_z,
+		translate([max(strength_factor, pin_z_count - 1)*hole_spacing_z + 1,
 			-hole_spacing_x*((pin_x_count-1)/2),0])
 			cylinder(r=hole_size_x/2, h=wall_thickness);
 
-		translate([max(strength_factor, pin_z_count - 1)*hole_spacing_z,
+		translate([max(strength_factor, pin_z_count - 1)*hole_spacing_z + 1,
 			hole_spacing_x*((pin_x_count-1)/2),0])
 			cylinder(r=hole_size_x/2,  h=wall_thickness);
 
